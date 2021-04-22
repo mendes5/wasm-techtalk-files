@@ -1,0 +1,22 @@
+<body>
+  <script type="text/javascript" src="index.js"></script>
+  <script>
+    Module.onRuntimeInitialized = () => {
+      fetch("./23.svg")
+        .then((res) => res.arrayBuffer())
+        .then((buffer) => {
+          const dataView = new Uint8Array(buffer);
+          FS.writeFile("/23.svg", dataView);
+
+          const runMain = Module.cwrap("runMain", "number", []);
+          runMain();
+
+          const fileData = FS.readFile("/svg.png");
+          const blob = new Blob([fileData], { type: "image/png" });
+          const image = new Image();
+          image.src = URL.createObjectURL(blob);
+          document.body.appendChild(image);
+        });
+    };
+  </script>
+</body>

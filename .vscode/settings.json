@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "nanosvg.h": "c",
+        "nanosvgrast.h": "c",
+        "stb_image_write.h": "c"
+    }
+}
