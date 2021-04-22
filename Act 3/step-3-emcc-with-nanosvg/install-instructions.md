@@ -1,3 +1,9 @@
+### 1. Clone it 
+
+```
+git clone --depth=1 git@github.com:memononen/nanosvg.git
+```
+
 ### 1. Make sure the Emscripten toolchain is running
 
 ```
