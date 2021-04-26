@@ -1,3 +1,4 @@
+// https://webassembly.studio/?f=vrqdkj8jym
 #include <stdlib.h>
 #define WASM_EXPORT __attribute__((visibility("default")))
 

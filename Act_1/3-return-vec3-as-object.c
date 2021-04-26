@@ -1,3 +1,4 @@
+// https://webassembly.studio/?f=k63946ezf2g
 #define WASM_EXPORT __attribute__((visibility("default")))
 
 typedef struct {
