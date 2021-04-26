@@ -1,3 +1,4 @@
+// https://webassembly.studio/?f=clfcsz2cu3v
 fetch("../out/main.wasm")
   .then((response) => response.arrayBuffer())
   .then((bytes) => WebAssembly.instantiate(bytes))

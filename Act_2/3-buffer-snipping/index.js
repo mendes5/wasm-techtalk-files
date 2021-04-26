@@ -1,3 +1,5 @@
+// https://webassembly.studio/?f=3pmfpdo61gs
+
 fetch("../out/main.wasm")
   .then((response) => response.arrayBuffer())
   .then((bytes) =>
@@ -14,7 +16,6 @@ fetch("../out/main.wasm")
   )
   .then(({ instance }) => {
       const result = instance.exports.vec2(10.65, 0.5);
-      console.log({ result });
     
       const buffer = instance.exports.memory.buffer;
 
@@ -24,9 +25,9 @@ fetch("../out/main.wasm")
     
       const memorySectionCopy = new DataView(buffer.slice(startAddress, endAddress));
     
-      const xComponent = memorySectionCopy.getFloat64(0 * numberFormatSize, true);
-      const yComponent = memorySectionCopy.getFloat64(1 * numberFormatSize, true);
+      const x = memorySectionCopy.getFloat64(0 * numberFormatSize, true);
+      const y = memorySectionCopy.getFloat64(1 * numberFormatSize, true);
               
-      console.log({ xComponent, yComponent });
+      console.log({ x, y });
   })
   .catch(console.error);

@@ -1,3 +1,5 @@
+// https://webassembly.studio/?f=js8swkdreqa
+
 fetch("../out/main.wasm")
   .then((response) => response.arrayBuffer())
   .then((bytes) =>

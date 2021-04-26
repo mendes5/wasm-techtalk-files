@@ -1,25 +1,27 @@
+// https://webassembly.studio/?f=nlnknvlyuu
+
 fetch("../out/main.wasm")
   .then((response) => response.arrayBuffer())
   .then((bytes) =>
     WebAssembly.instantiate(bytes, {
       env: {
-        __syscall1: (...args) => console.log("__syscall1", args),
-        __syscall2: (...args) => console.log("__syscall2", args),
-        __syscall3: (...args) => console.log("__syscall3", args),
-        __syscall4: (...args) => console.log("__syscall4", args),
-        __syscall5: (...args) => console.log("__syscall5", args),
-        __syscall6: (...args) => console.log("__syscall6", args),
+        __syscall1: (...args) => console.log('__syscall1', args),
+        __syscall2: (...args) => console.log('__syscall2', args),
+        __syscall3: (...args) => console.log('__syscall3', args),
+        __syscall4: (...args) => console.log('__syscall4', args),
+        __syscall5: (...args) => console.log('__syscall5', args),
+        __syscall6: (...args) => console.log('__syscall6', args),
       },
     })
   )
   .then(({ instance }) => {
-    const buffer = instance.exports.memory.buffer;
+      const buffer = instance.exports.memory.buffer;
 
-    const vecA = instance.exports.vec2(10, 20);
-    const vecB = instance.exports.vec2(30, 40);
-
-    printVec2AtAddress(buffer, vecA);
-    printVec2AtAddress(buffer, vecB);
+      const vecA = instance.exports.vec2(10.65, 0.5);
+      const vecB = instance.exports.vec2(10.65, 0.5);
+  
+      printVec2AtAddress(buffer, vecA);
+      printVec2AtAddress(buffer, vecB);
   })
   .catch(console.error);
 

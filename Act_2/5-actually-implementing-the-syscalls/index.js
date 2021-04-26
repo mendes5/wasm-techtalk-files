@@ -1,3 +1,4 @@
+// https://webassembly.studio/?f=ie9h66a7j1p
 let instance;
 let memoryPoolStart;
 
@@ -10,12 +11,12 @@ const SYSCALL_TABLE = {
 function syscallDispatcher(syscall_id, ...args) {
   const [
     // https://linux-kernel-labs.github.io/refs/heads/master/lectures/syscalls.html
-    EBX,
-    ECX,
-    EDX,
-    ESI,
-    EDI,
-    EBP,
+    arg1,
+    arg2,
+    arg3,
+    arg4,
+    arg5,
+    arg6,
   ] = args;
 
   switch (syscall_id) {
@@ -24,7 +25,7 @@ function syscallDispatcher(syscall_id, ...args) {
     // but since the memory is already allocated (we can only grow the existing buffer)
     // we just return success here
     case SYSCALL_TABLE.BRK: {
-      console.log('BRK called', { EBX, ECX, EDX, ESI, EDI, EBP });
+      console.log('BRK called', {  arg1, arg2, arg3, arg4, arg5, arg6 });
       return 0;
     }
 
@@ -34,31 +35,31 @@ function syscallDispatcher(syscall_id, ...args) {
     // ECX = requested size
     // Needs to return the start 
     case SYSCALL_TABLE.MMAP_2: {
-      console.log('MMAP Called', { EBX, ECX, EDX, ESI, EDI, EBP });
+      console.log('MMAP Called', {  arg1, arg2, arg3, arg4, arg5, arg6 });
   
-      console.log('C code is requesting', ECX, 'bytes');
+      console.log('C code is requesting', arg2, 'bytes');
 
       const currentMemoryAmount = instance.exports.memory.buffer.byteLength;
       console.log('Current memory amount:', currentMemoryAmount, 'bytes.', ' Memory pool start:', memoryPoolStart);
 
-      const needsToGrow = memoryPoolStart + ECX > currentMemoryAmount;
+      const needsToGrow = memoryPoolStart + arg2 > currentMemoryAmount;
       console.log('Needs to grow memory?', needsToGrow);
 
       if (needsToGrow) {
-        const newPageCountNeeded = Math.ceil((currentMemoryAmount - ECX) / currentMemoryAmount);
+        const newPageCountNeeded = Math.ceil((currentMemoryAmount - arg2) / currentMemoryAmount);
         console.log('Amount of pages needed:', newPageCountNeeded);
         instance.exports.memory.grow(newPageCountNeeded);
         console.log('New memory amount: ', instance.exports.memory.buffer.byteLength);
 
         const freshMemoryStartAddress = memoryPoolStart;
-        memoryPoolStart += ECX;
+        memoryPoolStart += arg2;
 
-        console.log('Now there is ', ECX, ' bytes of fresh memory starting at', freshMemoryStartAddress);
+        console.log('Now there is ', arg2, ' bytes of fresh memory starting at', freshMemoryStartAddress);
         return freshMemoryStartAddress;
       }
   
       const freshMemoryStartAddress = memoryPoolStart;
-      memoryPoolStart += ECX;
+      memoryPoolStart += arg2;
 
       console.log('No more memory is required, returning:', freshMemoryStartAddress);
       return freshMemoryStartAddress;

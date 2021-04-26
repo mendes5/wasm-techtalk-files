@@ -1,3 +1,4 @@
+// https://webassembly.studio/?f=nptve6d01c
 let instance;
 let memoryPoolStart;
 
@@ -8,40 +9,38 @@ const SYSCALL_TABLE = {
 
 function syscallDispatcher(syscall_id, ...args) {
   const [
-    EBX,
-    ECX,
-    EDX,
-    ESI,
-    EDI,
-    EBP,
+    arg1,
+    arg2,
+    arg3,
+    arg4,
+    arg5,
+    arg6,
   ] = args;
 
   switch (syscall_id) {
-    case SYSCALL_TABLE.BRK: {
+    case SYSCALL_TABLE.BRK:
       return 0;
-    }
 
-    case SYSCALL_TABLE.MMAP_2: {
+    case SYSCALL_TABLE.MMAP_2:
       const currentMemoryAmount = instance.exports.memory.buffer.byteLength;
-      const needsToGrow = memoryPoolStart + ECX > currentMemoryAmount;
+      const needsToGrow = memoryPoolStart + arg2 > currentMemoryAmount;
 
       if (needsToGrow) {
-        const newPageCountNeeded = Math.ceil((currentMemoryAmount - ECX) / currentMemoryAmount);
+        const newPageCountNeeded = Math.ceil((currentMemoryAmount - arg2) / currentMemoryAmount);
         instance.exports.memory.grow(newPageCountNeeded);
       }
   
       const freshMemoryStartAddress = memoryPoolStart;
-      memoryPoolStart += ECX;
-      return freshMemoryStartAddress;
-    }
+      memoryPoolStart += arg2;
 
-    default: {
+      return freshMemoryStartAddress;
+    
+
+    default:
       console.error(`Syscall ID ${n} is not defined`);
       break;
-    }
   }
 }
-
 
 fetch("../out/main.wasm")
   .then((response) => response.arrayBuffer())
@@ -64,8 +63,8 @@ fetch("../out/main.wasm")
 
     const vecA = instance.exports.vec2(10, 20);
     const vecB = instance.exports.vec2(30, 40);
-    const vecC = instance.exports.vec3(50, 60, 1);
-    const vecD = instance.exports.vec3(70, 80, 2);
+    const vecC = instance.exports.vec3(50, 60, 70);
+    const vecD = instance.exports.vec3(80, 90, 100);
 
     printVec2AtAddress(instance.exports.memory.buffer, vecA);
     printVec2AtAddress(instance.exports.memory.buffer, vecB);
